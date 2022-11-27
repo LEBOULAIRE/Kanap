@@ -90,10 +90,6 @@ function addToCart (){
                 id : idProduct,
                 color : colorPageValue,
                 quantity : quantityPageValue,
-                price : data.price,
-                image : data.imageUrl,
-                altText : data.altTxt,
-                nameProduct : data.name
             }; 
 
             let produitLocalStorageProduct = JSON.parse(localStorage.getItem("produit"));

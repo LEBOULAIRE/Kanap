@@ -1,5 +1,10 @@
+
 // Initialiser le localstorage
 const produitLocalStorage = JSON.parse(localStorage.getItem("produit"));
+
+
+// Récupérer donnée get sur le localhost;
+
 
 const items = document.getElementById ('cart__items');
 
@@ -15,16 +20,33 @@ localStorage.removeItem ('produit');
 }
 }
 
-else
-{
-for (let product in produitLocalStorage){
+else{
+
+for (let product of produitLocalStorage){
+
 // Insertion article
 const article = document.createElement ('article');
 items.appendChild (article);
 article.className = "cart__item";
-article.setAttribute ('data-id', produitLocalStorage[product].id);
-article.setAttribute ('data-color', produitLocalStorage[product].color);
-
+article.setAttribute ('data-id', product.id);
+article.setAttribute ('data-color', product.color);
+fetch ("http://localhost:3000/api/products/" + product.id)
+.then (function(res){
+    if (res.ok) {
+        return res.json();
+    }
+}
+)
+.then (
+    function (data) {
+        theProducts(data); 
+        deleteCart ();
+        modifyQuantity ();
+        totalProductPrice (data);
+    }
+    
+ )
+function theProducts (data) {
 // Cart__item__img
 const itemImg = document.createElement ('div');
 article.appendChild (itemImg);
@@ -33,8 +55,8 @@ itemImg.className = "cart__item__img";
 // Image
 const image = document.createElement ('img');
 itemImg.appendChild (image);
-image.setAttribute ('src', produitLocalStorage[product].image);
-image.setAttribute ('alt', produitLocalStorage[product].altText);
+image.setAttribute ('src', data.imageUrl);
+image.setAttribute ('alt', data.altTxt);
 
 // cart__item__content
 const itemContent = document.createElement ('div');
@@ -49,17 +71,17 @@ itemContentDescription.className = "cart__item__content__description"
 // Menu h2 
 const menu = document.createElement ('h2');
 itemContentDescription.appendChild (menu);
-menu.textContent = produitLocalStorage[product].nameProduct;
+menu.textContent = data.name;
 
 // Paragraphe couleur
 const textColor = document.createElement ('p');
 itemContentDescription.appendChild (textColor);
-textColor.textContent = produitLocalStorage[product].color;
+textColor.textContent = product.color;
 
 // Paragraphe prix
 const textPrice = document.createElement ('p');
 itemContentDescription.appendChild (textPrice);
-textPrice.textContent = `${produitLocalStorage[product].price} € `
+textPrice.textContent = `${data.price} € `
 
 // cart__item__content__settings
 const itemContentSettings = document.createElement ('div');
@@ -80,7 +102,7 @@ textQuantity.textContent = "Qté :"
 const input = document.createElement ('input');
 itemContentSettingsQuantity.appendChild (input);
 input.className = "itemQuantity";
-input.value = produitLocalStorage[product].quantity;
+input.value = product.quantity;
 input.setAttribute ('min', "1");
 input.setAttribute ('max', "100");
 input.setAttribute ('type', "number");
@@ -101,9 +123,11 @@ textDelete.className = "deleteItem";
 }
 }
 }
+}
 addCart ();
 
 // Modification de la quantité de produit ;
+      function modifyQuantity () {
       const quantityMore = document.querySelectorAll (".itemQuantity"); 
       
       for (let a = 0; a < quantityMore.length; a++) {
@@ -131,7 +155,7 @@ addCart ();
     })
   
 }
-
+      }
 
 
 
@@ -146,11 +170,10 @@ for (let l = 0;  l < deleteClass.length;  l++) {
       e.preventDefault();
       const clos = deleteClassFor.closest('article');
         
-      const dataId = clos.dataset.id;
-      const dataColor = clos.dataset.color;
-        
-        
-      const newLocalStorage = produitLocalStorage.filter (el => el.id !== dataId || el.color !== dataColor);
+      const dataId = clos.dataset.id + clos.dataset.color;
+         
+      const newLocalStorage = produitLocalStorage.filter (el => (el.id + el.color)!== dataId );
+      
       localStorage.setItem ("produit", JSON.stringify(newLocalStorage));
         
       alert ("Ce produit est supprimé du panier");
@@ -159,17 +182,18 @@ for (let l = 0;  l < deleteClass.length;  l++) {
     })
 }
 }
-deleteCart ()
+
 
 // Connaitre le prix total et le nombre de produit 
-  // Ensemble de nombre de produit
+  function totalProductPrice (data) {
   const numberProducts = document.querySelectorAll (".itemQuantity");;
   totalProducts = 0;
   totalPriceProducts = 0;
 
   for (let z = 0; z < numberProducts.length; z++) {
     const elementNumber = parseInt(numberProducts[z].value);
-    const elementPrice = produitLocalStorage[z].price
+    const elementPrice = data.price
+    console.log (elementNumber)
     totalProducts += elementNumber;
     totalPriceProducts += (elementNumber * elementPrice)
     
@@ -180,3 +204,7 @@ deleteCart ()
   const totalSomme = document.getElementById ('totalPrice');
   totalSomme.textContent = totalPriceProducts;
   console.log (totalPriceProducts)
+  }
+
+
+
