@@ -39,6 +39,7 @@ fetch ("http://localhost:3000/api/products/" + product.id)
 )
 .then (
     function (data) {
+        
         theProducts(data); 
         deleteCart ();
         modifyQuantity ();
@@ -172,15 +173,19 @@ for (let l = 0;  l < deleteClass.length;  l++) {
         
       const dataId = clos.dataset.id + clos.dataset.color;
          
-      const newLocalStorage = produitLocalStorage.filter (el => (el.id + el.color)!== dataId );
+      const newLocalStorage = produitLocalStorage.filter (el => (el.id + el.color) !== dataId );
       
       localStorage.setItem ("produit", JSON.stringify(newLocalStorage));
         
-      alert ("Ce produit est supprimé du panier");
+      alert ('Produit est supprimé')
+      
       location.reload()
+
         
     })
+    
 }
+
 }
 
 
@@ -207,4 +212,92 @@ for (let l = 0;  l < deleteClass.length;  l++) {
   }
 
 
+// Partie vérification formulaire
 
+
+const regexAdress = new RegExp ('^hjshdjshd$');
+const regexNameAndCity = new RegExp ('^[A-Za-zéèêëàçâ -]{3,30}$')
+const mail = new RegExp ('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$','g');
+
+const formBacket = document.querySelector ('.cart__order__form');
+console.log (formBacket.firstname);
+
+formBacket.firstName.addEventListener ('change', function (){
+console.log (firstName.value);
+firstName (this)
+})
+
+formBacket.lastName.addEventListener ('change', function (){
+console.log (lastName.value)
+lastName (this)
+})
+
+formBacket.address.addEventListener ('change', function (){
+
+})
+
+formBacket.city.addEventListener ('change', function (){
+city (this)
+})
+
+formBacket.email.addEventListener ('change', function (){
+validEmail (this)
+});
+
+
+function firstName (inputFirstName){
+
+const paragrapheFirstName = inputFirstName.nextElementSibling;
+const testFirstName = regexNameAndCity.test(inputFirstName.value)
+if (testFirstName) {
+    paragrapheFirstName.textContent = ''
+
+}
+else {
+    paragrapheFirstName.textContent = 'Veuillez indiquer un prénon valable'
+}
+}
+
+function lastName (inputLastName){
+  
+    const paragrapheLastName = inputLastName.nextElementSibling;
+    const testLastName = regexNameAndCity.test(inputLastName.value)
+    if (testLastName) {
+        paragrapheLastName.textContent = ''
+    
+    }
+    else {
+        paragrapheLastName.textContent = 'Veuillez indiquer un nom valable'
+    }
+    }
+
+
+function city (inputCity){
+const paragrapheCity = inputCity.nextElementSibling;
+const testCity = regexNameAndCity.test(inputCity.value)
+if (testCity) {
+     paragrapheCity.textContent = ''
+        
+}
+else {
+    paragrapheCity.textContent = 'Veuillez indiquer une ville valable'
+}
+}
+
+
+
+function validEmail (inputEmail) {
+
+const paragrapheError = inputEmail.nextElementSibling;
+const testEmail = mail.test(inputEmail.value);
+console.log (testEmail)
+if (testEmail) {
+    paragrapheError.textContent = '';
+}
+else {     
+    paragrapheError.textContent = 'Veuillez indiquer une adresse email valable'
+}
+}
+
+
+// ecoute des evenement par partie 
