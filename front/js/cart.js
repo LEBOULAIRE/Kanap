@@ -1,7 +1,7 @@
 
 // Initialiser le localstorage
 const produitLocalStorage = JSON.parse(localStorage.getItem("produit"));
-
+console.log (produitLocalStorage)
 
 // Récupérer donnée get sur le localhost;
 
@@ -15,9 +15,8 @@ if (produitLocalStorage === null || produitLocalStorage.length === 0)
 const textNoCart = document.createElement ('p');
 items.appendChild (textNoCart);
 textNoCart.textContent = "Le panier est vide";
-if (produitLocalStorage.length === 0) {
 localStorage.removeItem ('produit');
-}
+
 }
 
 else{
@@ -47,7 +46,10 @@ fetch ("http://localhost:3000/api/products/" + product.id)
     }
     
  )
-function theProducts (data) {
+ .catch(function(err){ alert('connexion serveur non accompli')});
+
+
+ function theProducts (data) {
 // Cart__item__img
 const itemImg = document.createElement ('div');
 article.appendChild (itemImg);
@@ -215,25 +217,23 @@ for (let l = 0;  l < deleteClass.length;  l++) {
 // Partie vérification formulaire
 
 
-const regexAdress = new RegExp ('^hjshdjshd$');
+const regexAdress = new RegExp ('^([0-9]{1,3})?[-,;a-zA-Zzéèêëàçâ ]+$');
 const regexNameAndCity = new RegExp ('^[A-Za-zéèêëàçâ -]{3,30}$')
-const mail = new RegExp ('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$','g');
+const mail = new RegExp ('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
 
 const formBacket = document.querySelector ('.cart__order__form');
 console.log (formBacket.firstname);
 
 formBacket.firstName.addEventListener ('change', function (){
-console.log (firstName.value);
 firstName (this)
 })
 
 formBacket.lastName.addEventListener ('change', function (){
-console.log (lastName.value)
 lastName (this)
 })
 
 formBacket.address.addEventListener ('change', function (){
-
+adress (this)
 })
 
 formBacket.city.addEventListener ('change', function (){
@@ -260,16 +260,16 @@ else {
 
 function lastName (inputLastName){
   
-    const paragrapheLastName = inputLastName.nextElementSibling;
-    const testLastName = regexNameAndCity.test(inputLastName.value)
-    if (testLastName) {
-        paragrapheLastName.textContent = ''
+const paragrapheLastName = inputLastName.nextElementSibling;
+const testLastName = regexNameAndCity.test(inputLastName.value)
+if (testLastName) {
+paragrapheLastName.textContent = ''
     
-    }
-    else {
+}
+else {
         paragrapheLastName.textContent = 'Veuillez indiquer un nom valable'
-    }
-    }
+}
+}
 
 
 function city (inputCity){
@@ -284,7 +284,17 @@ else {
 }
 }
 
+function adress (inputAdress) {
 
+const paragrapheAdress = inputAdress.nextElementSibling;
+const testAdress = regexAdress.test(inputAdress.value);
+if (testAdress) {
+    paragrapheAdress.textContent = '';
+}
+else {     
+    paragrapheAdress.textContent = 'Veuillez indiquer une adresse postale valable'
+}
+}
 
 function validEmail (inputEmail) {
 
@@ -300,4 +310,4 @@ else {
 }
 
 
-// ecoute des evenement par partie 
+
