@@ -189,7 +189,6 @@ function totalProductPrice(data) {
   totalQty.textContent = totalProducts;
   const totalSomme = document.getElementById("totalPrice");
   totalSomme.textContent = totalPriceProducts;
-  
 }
 
 // (Partie vérification formulaire)
@@ -277,63 +276,61 @@ function validEmail(inputEmail) {
 }
 // Fonciton pour envoyer la commande
 function postForm() {
-  const order = document.getElementById('order');
-  order.addEventListener('click', (event) => {
-  event.preventDefault();
+  const order = document.getElementById("order");
+  order.addEventListener("click", (event) => {
+    event.preventDefault();
 
-  // Les données du client
-  const contact = {
-    firstName : document.getElementById('firstName').value,
-    lastName : document.getElementById('lastName').value,
-    address : document.getElementById('address').value,
-    city : document.getElementById('city').value,
-    email : document.getElementById('email').value
-  }
-  
-  if ((produitLocalStorage === null || produitLocalStorage.length === 0)||
-      (contact.firstName == '' || contact.lastName == '' || contact.address == '' || 
-       contact.city == '' || contact.email == '')) 
-         {
-        alert ('Le panier ou le formulaire est vide')
+    // Les données du client
+    const contact = {
+      firstName: document.getElementById("firstName").value,
+      lastName: document.getElementById("lastName").value,
+      address: document.getElementById("address").value,
+      city: document.getElementById("city").value,
+      email: document.getElementById("email").value,
+    };
 
-  }
+    if (
+      produitLocalStorage === null ||
+      produitLocalStorage.length === 0 ||
+      contact.firstName == "" ||
+      contact.lastName == "" ||
+      contact.address == "" ||
+      contact.city == "" ||
+      contact.email == ""
+    ) {
+      alert("Le panier ou le formulaire est vide");
+    } else {
+      //Regroupement de toutes les id des produits dans le panier
+      let products = [];
+      for (let i = 0; i < produitLocalStorage.length; i++) {
+        products.push(produitLocalStorage[i].id);
+      }
 
-  else {
-  //Regroupement de toutes les id des produits dans le panier
-  let products = [];
-  for (let i = 0; i<produitLocalStorage.length;i++) {
-      products.push(produitLocalStorage[i].id);
-  }
-  
+      // Je mets ensemble donnée client et id produit dans objet
+      const sendFormData = {
+        contact,
+        products,
+      };
 
-  
-  // Je mets ensemble donnée client et id produit dans objet
-  const sendFormData = {
-    contact,
-    products,
-  }
+      // Envoie des informations au serveur
+      const options = {
+        method: "POST",
+        body: JSON.stringify(sendFormData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-  
-  // Envoie des informations au serveur
-    const options = {
-    method: 'POST',
-    body: JSON.stringify(sendFormData),
-    headers: { 
-      'Content-Type': 'application/json',
+      // Requete fetch a l'aide de fetch
+      fetch("http://localhost:3000/api/products/order", options)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          localStorage.clear();
+          localStorage.setItem("orderId", data.orderId);
+          document.location.href = "confirmation.html?id=" + data.orderId;
+        });
     }
-  };
-
-  // Requete fetch a l'aide de fetch
-  fetch("http://localhost:3000/api/products/order", options)
-      .then(response => response.json())
-      .then(data => { console.log (data);
-      localStorage.clear();
-      localStorage.setItem('orderId', data.orderId);
-      document.location.href = 'confirmation.html?id='+ data.orderId;
-      
-    });
-
-  }
-}); 
-} 
+  });
+}
 postForm();

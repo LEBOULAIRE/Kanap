@@ -120,7 +120,8 @@ function theProducts(data) {
         produitLocalStorageProduct = [];
         produitLocalStorageProduct.push(objetProduct);
         localStorage.setItem(
-          "produit", JSON.stringify(produitLocalStorageProduct)
+          "produit",
+          JSON.stringify(produitLocalStorageProduct)
         );
         alert("Ajout au panier");
       }
