@@ -174,6 +174,7 @@ function deleteCart() {
 
 // Connaitre le prix total et le nombre de produit
 function totalProductPrice(data) {
+  // Récupération de tous les produits pour le total
   const numberProducts = document.querySelectorAll(".itemQuantity");
   totalProducts = 0;
   totalPriceProducts = 0;
@@ -224,6 +225,7 @@ formBacket.email.addEventListener("change", function () {
   validEmail(this);
 });
 // Fonction pour prénom
+
 function firstName(inputFirstName) {
   const paragrapheFirstName = inputFirstName.nextElementSibling;
   const testFirstName = regexNameAndCity.test(inputFirstName.value);
@@ -255,7 +257,9 @@ function city(inputCity) {
 }
 // fonction pour valider adresse
 function adress(inputAdress) {
+  // element suivant de l'HTML
   const paragrapheAdress = inputAdress.nextElementSibling;
+
   const testAdress = regexAdress.test(inputAdress.value);
   if (testAdress) {
     paragrapheAdress.textContent = "";
@@ -264,6 +268,7 @@ function adress(inputAdress) {
       "Veuillez indiquer une adresse postale valable";
   }
 }
+
 // funcion pour valider email
 function validEmail(inputEmail) {
   const paragrapheError = inputEmail.nextElementSibling;
@@ -287,8 +292,13 @@ function postForm() {
       address: document.getElementById("address").value,
       city: document.getElementById("city").value,
       email: document.getElementById("email").value,
+      falseFirstName: document.getElementById("firstNameErrorMsg").textContent,
+      falseLastName: document.getElementById("lastNameErrorMsg").textContent,
+      falseAdress: document.getElementById("addressErrorMsg").textContent,
+      falseCity: document.getElementById("cityErrorMsg").textContent,
+      falseEmail: document.getElementById("emailErrorMsg").textContent,
     };
-
+    console.log(contact.falseFirstName);
     if (
       produitLocalStorage === null ||
       produitLocalStorage.length === 0 ||
@@ -296,9 +306,16 @@ function postForm() {
       contact.lastName == "" ||
       contact.address == "" ||
       contact.city == "" ||
-      contact.email == ""
+      contact.email == "" ||
+      contact.falseFirstName != "" ||
+      contact.falseLastName != "" ||
+      contact.falseAdress != "" ||
+      contact.falseCity != "" ||
+      contact.falseEmail != ""
     ) {
-      alert("Le panier ou le formulaire est vide");
+      alert(
+        "Le panier est vide ou le formulaire n'est pas correct pour la commande"
+      );
     } else {
       //Regroupement de toutes les id des produits dans le panier
       let products = [];
