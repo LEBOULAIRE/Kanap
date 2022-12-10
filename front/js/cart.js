@@ -138,11 +138,16 @@ function modifyQuantity() {
 
       // Envoie de la nouvlle quantité dans le localstorage
       let newValueQuantity = parseInt(quantityFor.value);
+      console.log (newValueQuantity)
+      if (newValueQuantity > 100) {
+          alert ('La quantité est limité à 100 par produit')
+      }
+      else {
       let produitLocalStoraged = result.quantity;
       produitLocalStoraged = newValueQuantity;
       produitLocalStorage[a].quantity = newValueQuantity;
       localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
-
+      }
       location.reload();
     });
   }
@@ -285,6 +290,17 @@ function postForm() {
   order.addEventListener("click", (event) => {
     event.preventDefault();
 
+    // Objet pour vérifier si le formulaire est corret
+    const verify = {
+      
+      falseFirstName: document.getElementById("firstNameErrorMsg").textContent,
+      falseLastName: document.getElementById("lastNameErrorMsg").textContent,
+      falseAdress: document.getElementById("addressErrorMsg").textContent,
+      falseCity: document.getElementById("cityErrorMsg").textContent,
+      falseEmail: document.getElementById("emailErrorMsg").textContent,
+    };
+
+
     // Les données du client
     const contact = {
       firstName: document.getElementById("firstName").value,
@@ -292,13 +308,8 @@ function postForm() {
       address: document.getElementById("address").value,
       city: document.getElementById("city").value,
       email: document.getElementById("email").value,
-      falseFirstName: document.getElementById("firstNameErrorMsg").textContent,
-      falseLastName: document.getElementById("lastNameErrorMsg").textContent,
-      falseAdress: document.getElementById("addressErrorMsg").textContent,
-      falseCity: document.getElementById("cityErrorMsg").textContent,
-      falseEmail: document.getElementById("emailErrorMsg").textContent,
     };
-    console.log(contact.falseFirstName);
+    
     if (
       produitLocalStorage === null ||
       produitLocalStorage.length === 0 ||
@@ -307,11 +318,11 @@ function postForm() {
       contact.address == "" ||
       contact.city == "" ||
       contact.email == "" ||
-      contact.falseFirstName != "" ||
-      contact.falseLastName != "" ||
-      contact.falseAdress != "" ||
-      contact.falseCity != "" ||
-      contact.falseEmail != ""
+      verify.falseFirstName != "" ||
+      verify.falseLastName != "" ||
+      verify.falseAdress != "" ||
+      verify.falseCity != "" ||
+      verify.falseEmail != ""
     ) {
       alert(
         "Le panier est vide ou le formulaire n'est pas correct pour la commande"

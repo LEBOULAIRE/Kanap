@@ -7,4 +7,5 @@ let id = url.searchParams.get("id");
 const numId = document.getElementById("orderId");
 numId.textContent = id;
 
+// supprimer le local storage
 localStorage.clear();
