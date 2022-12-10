@@ -28,89 +28,83 @@ function addCart() {
           }
         })
         .then(function (data) {
-          theProducts(data);
+          // Cart__item__img
+          const itemImg = document.createElement("div");
+          article.appendChild(itemImg);
+          itemImg.className = "cart__item__img";
+
+          // Image
+          const image = document.createElement("img");
+          itemImg.appendChild(image);
+          image.setAttribute("src", data.imageUrl);
+          image.setAttribute("alt", data.altTxt);
+
+          // cart__item__content
+          const itemContent = document.createElement("div");
+          article.appendChild(itemContent);
+          itemContent.className = "cart__item__content";
+
+          // cart__item__content__description
+          const itemContentDescription = document.createElement("div");
+          itemContent.appendChild(itemContentDescription);
+          itemContentDescription.className = "cart__item__content__description";
+
+          // Menu h2
+          const menu = document.createElement("h2");
+          itemContentDescription.appendChild(menu);
+          menu.textContent = data.name;
+
+          // Paragraphe couleur
+          const textColor = document.createElement("p");
+          itemContentDescription.appendChild(textColor);
+          textColor.textContent = product.color;
+
+          // Paragraphe prix
+          const textPrice = document.createElement("p");
+          itemContentDescription.appendChild(textPrice);
+          textPrice.textContent = `${data.price} € `;
+
+          // cart__item__content__settings
+          const itemContentSettings = document.createElement("div");
+          itemContent.appendChild(itemContentSettings);
+          itemContentSettings.className = "cart__item__content__settings";
+
+          // cart__item__content__settings__quantity
+          const itemContentSettingsQuantity = document.createElement("div");
+          itemContentSettings.appendChild(itemContentSettingsQuantity);
+          itemContentSettingsQuantity.className =
+            "cart__item__content__settings__quantity";
+
+          // Paragraphe quantité
+          const textQuantity = document.createElement("p");
+          itemContentSettingsQuantity.appendChild(textQuantity);
+          textQuantity.textContent = "Qté :";
+
+          //input quantité
+          const input = document.createElement("input");
+          itemContentSettingsQuantity.appendChild(input);
+          input.className = "itemQuantity";
+          input.value = product.quantity;
+          input.setAttribute("min", "1");
+          input.setAttribute("max", "100");
+          input.setAttribute("type", "number");
+          input.setAttribute("name", "itemQuantity");
+
+          // cart__item__content__settings__delete
+          const itemContentDelete = document.createElement("div");
+          itemContentSettings.appendChild(itemContentDelete);
+          itemContentDelete.className = "cart__item__content__settings__delete";
+
+          // Paragraphe delete
+          const textDelete = document.createElement("p");
+          itemContentDelete.appendChild(textDelete);
+          textDelete.textContent = "Supprimer";
+          textDelete.className = "deleteItem";
           deleteCart();
           modifyQuantity();
           totalProductPrice(data);
         })
-        .catch(function (err) {
-          alert("connexion serveur non accompli");
-        });
-
-      function theProducts(data) {
-        // Cart__item__img
-        const itemImg = document.createElement("div");
-        article.appendChild(itemImg);
-        itemImg.className = "cart__item__img";
-
-        // Image
-        const image = document.createElement("img");
-        itemImg.appendChild(image);
-        image.setAttribute("src", data.imageUrl);
-        image.setAttribute("alt", data.altTxt);
-
-        // cart__item__content
-        const itemContent = document.createElement("div");
-        article.appendChild(itemContent);
-        itemContent.className = "cart__item__content";
-
-        // cart__item__content__description
-        const itemContentDescription = document.createElement("div");
-        itemContent.appendChild(itemContentDescription);
-        itemContentDescription.className = "cart__item__content__description";
-
-        // Menu h2
-        const menu = document.createElement("h2");
-        itemContentDescription.appendChild(menu);
-        menu.textContent = data.name;
-
-        // Paragraphe couleur
-        const textColor = document.createElement("p");
-        itemContentDescription.appendChild(textColor);
-        textColor.textContent = product.color;
-
-        // Paragraphe prix
-        const textPrice = document.createElement("p");
-        itemContentDescription.appendChild(textPrice);
-        textPrice.textContent = `${data.price} € `;
-
-        // cart__item__content__settings
-        const itemContentSettings = document.createElement("div");
-        itemContent.appendChild(itemContentSettings);
-        itemContentSettings.className = "cart__item__content__settings";
-
-        // cart__item__content__settings__quantity
-        const itemContentSettingsQuantity = document.createElement("div");
-        itemContentSettings.appendChild(itemContentSettingsQuantity);
-        itemContentSettingsQuantity.className =
-          "cart__item__content__settings__quantity";
-
-        // Paragraphe quantité
-        const textQuantity = document.createElement("p");
-        itemContentSettingsQuantity.appendChild(textQuantity);
-        textQuantity.textContent = "Qté :";
-
-        //input quantité
-        const input = document.createElement("input");
-        itemContentSettingsQuantity.appendChild(input);
-        input.className = "itemQuantity";
-        input.value = product.quantity;
-        input.setAttribute("min", "1");
-        input.setAttribute("max", "100");
-        input.setAttribute("type", "number");
-        input.setAttribute("name", "itemQuantity");
-
-        // cart__item__content__settings__delete
-        const itemContentDelete = document.createElement("div");
-        itemContentSettings.appendChild(itemContentDelete);
-        itemContentDelete.className = "cart__item__content__settings__delete";
-
-        // Paragraphe delete
-        const textDelete = document.createElement("p");
-        itemContentDelete.appendChild(textDelete);
-        textDelete.textContent = "Supprimer";
-        textDelete.className = "deleteItem";
-      }
+        .catch(function (err) {alert("connexion serveur non accompli")});
     }
   }
 }
@@ -136,17 +130,16 @@ function modifyQuantity() {
         (el) => el.id === dataId && el.color === dataColor
       );
 
-      // Envoie de la nouvlle quantité dans le localstorage
+      // Envoie de la nouvelle quantité dans le localstorage
       let newValueQuantity = parseInt(quantityFor.value);
-      console.log (newValueQuantity)
+      console.log(newValueQuantity);
       if (newValueQuantity > 100) {
-          alert ('La quantité est limité à 100 par produit')
-      }
-      else {
-      let produitLocalStoraged = result.quantity;
-      produitLocalStoraged = newValueQuantity;
-      produitLocalStorage[a].quantity = newValueQuantity;
-      localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+        alert("La quantité est limité à 100 par produit");
+      } else {
+        let produitLocalStoraged = result.quantity;
+        produitLocalStoraged = newValueQuantity;
+        produitLocalStorage[a].quantity = newValueQuantity;
+        localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
       }
       location.reload();
     });
@@ -177,16 +170,20 @@ function deleteCart() {
   }
 }
 
+
 // Connaitre le prix total et le nombre de produit
 function totalProductPrice(data) {
   // Récupération de tous les produits pour le total
   const numberProducts = document.querySelectorAll(".itemQuantity");
+  
   totalProducts = 0;
   totalPriceProducts = 0;
 
   for (let z = 0; z < numberProducts.length; z++) {
+    console.log(numberProducts);
     const elementNumber = parseInt(numberProducts[z].value);
     const elementPrice = data.price;
+    console.log (elementPrice)
     totalProducts += elementNumber;
     totalPriceProducts += elementNumber * elementPrice;
   }
@@ -209,7 +206,7 @@ const mail = new RegExp(
 // Ecoute des différents input lors d'un changment
 
 const formBacket = document.querySelector(".cart__order__form");
-
+console.log (formBacket)
 formBacket.firstName.addEventListener("change", function () {
   firstName(this);
 });
@@ -292,14 +289,12 @@ function postForm() {
 
     // Objet pour vérifier si le formulaire est corret
     const verify = {
-      
       falseFirstName: document.getElementById("firstNameErrorMsg").textContent,
       falseLastName: document.getElementById("lastNameErrorMsg").textContent,
       falseAdress: document.getElementById("addressErrorMsg").textContent,
       falseCity: document.getElementById("cityErrorMsg").textContent,
       falseEmail: document.getElementById("emailErrorMsg").textContent,
     };
-
 
     // Les données du client
     const contact = {
@@ -309,7 +304,7 @@ function postForm() {
       city: document.getElementById("city").value,
       email: document.getElementById("email").value,
     };
-    
+
     if (
       produitLocalStorage === null ||
       produitLocalStorage.length === 0 ||
