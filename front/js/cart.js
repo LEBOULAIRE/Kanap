@@ -1,6 +1,6 @@
 // Initialiser le localstorage
 const produitLocalStorage = JSON.parse(localStorage.getItem("produit"));
-console.log(produitLocalStorage);
+
 
 // Récupérer donnée get sur le localhost;
 
@@ -132,7 +132,6 @@ function modifyQuantity() {
 
       // Envoie de la nouvelle quantité dans le localstorage
       let newValueQuantity = parseInt(quantityFor.value);
-      console.log(newValueQuantity);
       if (newValueQuantity > 100) {
         alert("La quantité est limité à 100 par produit");
       } else {
@@ -171,23 +170,23 @@ function deleteCart() {
 }
 
 
+
 // Connaitre le prix total et le nombre de produit
 function totalProductPrice(data) {
   // Récupération de tous les produits pour le total
   const numberProducts = document.querySelectorAll(".itemQuantity");
-  
   totalProducts = 0;
   totalPriceProducts = 0;
 
   for (let z = 0; z < numberProducts.length; z++) {
-    console.log(numberProducts);
+    
     const elementNumber = parseInt(numberProducts[z].value);
     const elementPrice = data.price;
-    console.log (elementPrice)
     totalProducts += elementNumber;
     totalPriceProducts += elementNumber * elementPrice;
+    
   }
-
+ 
   const totalQty = document.getElementById("totalQuantity");
   totalQty.textContent = totalProducts;
   const totalSomme = document.getElementById("totalPrice");
@@ -206,7 +205,7 @@ const mail = new RegExp(
 // Ecoute des différents input lors d'un changment
 
 const formBacket = document.querySelector(".cart__order__form");
-console.log (formBacket)
+
 formBacket.firstName.addEventListener("change", function () {
   firstName(this);
 });
@@ -348,7 +347,6 @@ function postForm() {
       fetch("http://localhost:3000/api/products/order", options)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           localStorage.clear();
           localStorage.setItem("orderId", data.orderId);
           document.location.href = "confirmation.html?id=" + data.orderId;
